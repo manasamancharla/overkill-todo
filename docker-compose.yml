@@ -1,0 +1,31 @@
+services:
+
+  app:
+    build: .
+    container_name: overkill-todo-app
+    ports:
+      - "8000:8000"
+    environment:
+      MONGO_URI: mongodb://mongo:27017/
+      DB_NAME: overkill_todo
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    container_name: overkill-todo-mongo
+    ports:
+      - "27017:27017"          # exposed locally for inspection (Compass etc)
+    volumes:
+      - mongo_data:/data/db    # data persists between restarts
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
