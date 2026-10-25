@@ -17,9 +17,9 @@ services:
     image: mongo:7
     container_name: overkill-todo-mongo
     ports:
-      - "27017:27017"          # exposed locally for inspection (Compass etc)
+      - "27017:27017"
     volumes:
-      - mongo_data:/data/db    # data persists between restarts
+      - mongo_data:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 5s
